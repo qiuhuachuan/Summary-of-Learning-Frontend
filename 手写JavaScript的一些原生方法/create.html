@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写Object.create方法</title>
+  </head>
+  <body>
+    <script>
+      // 分析
+      // Object.create(obj) 方法接收一个对象，此时我们称其为旧对象，具体实现可以分为以下步骤：
+      // 1. 调用此方法会创建一个全新的对象
+      // 2. 这个新对象的__proto__属性指向旧对象，即新对象的原型指向旧对象
+      // 3. 返回这个新对象
+
+      // 实现1 推荐
+      function _create(oldObj) {
+        if (typeof oldObj === 'object' || typeof oldObj === 'function') {
+          let newObj = {}
+          newObj.__proto__ = oldObj
+          return newObj
+        } else {
+          throw new Error(
+            'The arg should be null, or type of object or function'
+          )
+        }
+      }
+      // 测试
+      console.log(_create(null))
+      console.log(Object.create(null))
+      console.log('-'.repeat(8))
+      // 基于函数创建新对象的测试
+      function Person() {
+        this.name = 'Allen'
+      }
+      console.log(_create(Person))
+      console.log(Object.create(Person))
+      console.log('-'.repeat(8))
+
+      // 实现2 采用new操作符和构造函数
+      function _create2(oldObj) {
+        Func = function () {}
+        Func.prototype = oldObj
+        return new Func()
+      }
+      // 测试
+      let o = { name: 'Allen' }
+      console.log(_create2(o))
+      console.log(_create(o))
+      console.log(Object.create(o))
+    </script>
+  </body>
+</html>
