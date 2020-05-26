@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写Array.isArray()方法</title>
+  </head>
+  <body>
+    <script>
+      // 方法1
+      const isArray1 = arr => {
+        return arr instanceof Array
+      }
+
+      // 方法2
+      const isArray2 = arr => {
+        if (arr == null) return 'This is "null" or "undefined"'
+        return arr.constructor === Array
+      }
+
+      // 方法3
+      const isArray3 = arr => {
+        return Array.prototype.isPrototypeOf(arr)
+      }
+
+      // 方法4
+      const isArray4 = arr => {
+        if (arr == null) return 'This is "null" or "undefined"'
+        return Reflect.getPrototypeOf(arr) === Array.prototype
+      }
+
+      // 方法5
+      const isArray5 = arr => {
+        return Object.prototype.toString.call(arr) === '[object Array]'
+      }
+
+      // test
+      const arr = []
+      console.log(isArray1(null))
+      console.log(isArray2(null))
+      console.log(isArray3(null))
+      console.log(isArray4(undefined))
+      console.log(isArray5(undefined))
+      console.log(Array.isArray(arr)) // Array.isArray()方法
+      console.log(Object.prototype.toString.call(null)) // [object Null]
+      console.log(Object.prototype.toString.call(undefined)) // [object Undefined]
+      console.log(
+        Object.prototype.toString.call(NaN) === '[object Number]' && NaN !== NaN
+      )
+      console.log(Object.prototype.toString.call(Date)) // [object Function]
+      console.log(Object.prototype.toString.call(new Date())) // [object Date]
+      console.log(Object.prototype.toString.call(new Error())) // [object Error]
+    </script>
+  </body>
+</html>

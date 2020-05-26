@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写reduce</title>
+  </head>
+  <body>
+    <script>
+      function handler(accumulator, currentValue, currentIndex, sourceArray) {
+        return accumulator + currentValue
+      }
+
+      Array.prototype._reduce = function (cbFunc, initialValue) {
+        const sourceArray = this
+        let accumulator
+
+        if (initialValue === 0 || initialValue !== undefined) {
+          accumulator = initialValue
+          for (let [index, value] of sourceArray.entries()) {
+            accumulator = cbFunc(accumulator, value, index, sourceArray)
+          }
+        } else {
+          accumulator = sourceArray[0]
+          for (let [index, value] of sourceArray.entries()) {
+            if (index === 0) continue
+            accumulator = cbFunc(accumulator, value, index, sourceArray)
+          }
+        }
+        return accumulator
+      }
+
+      // 测试
+      console.log([1, 2, 3, 4, 5]._reduce(handler, 0))
+      console.log([1, 2, 3, 4, 5]._reduce((a, b) => a + b, 0))
+    </script>
+  </body>
+</html>

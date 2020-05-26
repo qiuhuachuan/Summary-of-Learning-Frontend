@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写深拷贝</title>
+  </head>
+  <body>
+    <script>
+      function deepCopy(obj) {
+        if (
+          Object.prototype.toString.call(obj) === '[object Object]' &&
+          obj !== null
+        ) {
+          let cloneObj = {}
+          for (let key in obj) {
+            cloneObj[key] = deepCopy(obj[key])
+          }
+          return cloneObj
+        } else if (Array.isArray(obj)) {
+          let cloneArr = []
+          for (let [index, value] of obj.entries()) {
+            cloneArr[index] = deepCopy(obj[index])
+          }
+          return cloneArr
+        } else {
+          return obj
+        }
+      }
+      // 测试
+      let obj = { a: { b: [{ c: 2 }, { d: 3 }] } }
+      let result = deepCopy(obj)
+      result.a.b.push({ e: 66 })
+      console.log(result)
+      console.log(obj)
+    </script>
+  </body>
+</html>

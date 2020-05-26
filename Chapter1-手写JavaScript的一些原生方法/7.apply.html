@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写apply</title>
+  </head>
+  <body>
+    <script>
+      Function.prototype._apply = function (thisObj, argsArray) {
+        Object.defineProperty(thisObj, 'thisFunc', { value: this })
+        const result = thisObj.thisFunc(...argsArray)
+        delete thisObj.thisFunc
+        return result
+      }
+
+      // 测试
+      const func = function (...arg) {
+        console.log(this.name, arg)
+      }
+      func._apply({ name: 'Allen' }, [1, 2, 3])
+    </script>
+  </body>
+</html>

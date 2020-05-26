@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写bind</title>
+  </head>
+  <body>
+    <script>
+      Function.prototype._bind = function (obj, ...rest) {
+        const _this = this
+        return function () {
+          _this.apply(obj, rest)
+        }
+      }
+      const func = function (...arg) {
+        console.log(this.name, ...arg)
+      }
+      func._bind({ name: 'Allen' }, 1, 2, 3)()
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写event事件</title>
+  </head>
+  <body>
+    <script>
+      // 事件的绑定 解绑 触发
+      class Event {
+        _cache
+        constructor() {
+          this._cache = {}
+        }
+
+        // 绑定
+        on(type, cb) {
+          if (!this._cache[type]) {
+            this._cache[type] = []
+          }
+          if (!this._cache[type].find(item => item.name === cb.name)) {
+            this._cache[type].push(cb)
+            // console.log(!!this._cache[type].find(item => item.name === cb.name))
+          }
+        }
+
+        // 解绑
+        off(type, cb) {
+          if (!this._cache[type]) {
+            throw new Error('this type is not defined')
+          } else {
+            if (!!this._cache[type].find(item => item.name === cb.name)) {
+              const cbIndex = this._cache[type].findIndex(
+                item => item.name === cb.name
+              )
+              // console.log(cbIndex)
+              this._cache[type].splice(cbIndex, 1)
+            }
+          }
+        }
+        trigger(type, data) {
+          if (!this._cache[type]) {
+            console.log(new Error('this type is not defined'))
+          } else {
+            if (this._cache[type].length === 0) {
+              console.log('There is no function in Type', type)
+            } else {
+              this._cache[type].forEach(item => {
+                item(data)
+              })
+            }
+          }
+        }
+      }
+
+      const e = new Event()
+      e.on('click', function click0(data) {
+        console.log('click0', data)
+      })
+      e.on('click', function click1(data) {
+        console.log('click1', data)
+      })
+      e.on('click', function click2(data) {
+        console.log(data)
+      })
+      e.off('click', function click2(data) {
+        console.log(data)
+      })
+      e.off('click', function click1(data) {
+        console.log(data)
+      })
+      e.off('click', function click0(data) {
+        console.log(data)
+      })
+      console.log(e)
+      e.trigger('click', 'Bye world')
+    </script>
+  </body>
+</html>
