@@ -2,7 +2,7 @@
 
 学习前端的个人总结，包括但不限于 HTML、CSS、JavaScript、Webpack、TypeScript、HTTP 等
 
-- [Chapter1-手写 JavaScript 的一些原生方法](./Chapter1-手写JavaScript的一些原生方法)
+## 1 [Chapter1-手写 JavaScript 的一些原生方法](./Chapter1-手写JavaScript的一些原生方法)
 
 1. [手写 Object.create()方法](./Chapter1-手写JavaScript的一些原生方法/1.create.html)
 2. [手写 event 事件](./Chapter1-手写JavaScript的一些原生方法/2.event.html)
