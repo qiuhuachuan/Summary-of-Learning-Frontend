@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proxy</title>
+  </head>
+  <body>
+    <script>
+      let obj1 = {
+        name: 'Allen',
+        price: 190
+      }
+
+      // get
+      let p1 = new Proxy(obj1, {
+        get(target, key) {
+          if (key === 'price') {
+            return target[key] + 20
+          } else {
+            return target[key]
+          }
+        }
+      })
+      console.log(p1.name) // Allen
+      console.log(p1.price) // 210
+
+      console.log('场景1')
+      // 场景1
+      let obj2 = {
+        name: 'Allen',
+        price: 190
+      }
+      // ES6实现
+      let p2 = new Proxy(obj2, {
+        get(target, key) {
+          return target[key]
+        },
+        set(target, key, value) {
+          return false
+        }
+      })
+      p2.price = 300
+      p2.name = 'Mary'
+      console.log(p2.name) // Allen
+      console.log(p2.price) // 190
+      // ES5实现
+      for (const [key, value] of Object.entries(obj2)) {
+        Object.defineProperty(obj2, key, {
+          writable: false
+        })
+      }
+      obj2.price = 300
+      obj2.name = 'Mary'
+      console.log(obj2.name, obj2.price) // Allen 190
+
+      console.log('场景2')
+      // 场景2：校验
+      let obj3 = {
+        name: 'Allex',
+        price: 190
+      }
+      let p3 = new Proxy(obj3, {
+        get(target, key) {
+          return target[key] || null
+        },
+        set(target, key, value) {
+          if (Reflect.has(target, key)) {
+            if (key === 'price') {
+              if (value > 300) {
+                return false
+              } else {
+                target[key] = value
+              }
+            } else {
+              target[key] = value
+            }
+          }
+        }
+      })
+      p3.price = 280
+      p3.name = 'hanmeimei'
+      p3.age = 18
+      console.log(p3.name, p3.price, p3.age)
+
+      console.log('场景3')
+      // 场景3：监控
+      window.addEventListener(
+        'error',
+        e => {
+          console.log(e.message)
+          // 添加report上报逻辑
+        },
+        true
+      )
+      let obj4 = {
+        name: 'Lilei',
+        price: 266
+      }
+      let p4 = new Proxy(obj4, {
+        get(target, key) {
+          return target[key] || null
+        },
+        set(target, key, value) {
+          if (Reflect.has(target, key)) {
+            if (key === 'price') {
+              if (value > 300) {
+                // 不满足规则就要触发错误
+                throw new TypeError('price exceeds 300.')
+              } else {
+                target[key] = value
+              }
+            } else {
+              target[key] = value
+            }
+          }
+        }
+      })
+      // p4.price = 380 // 利用错误中断违法操作
+      p4.name = 'Han Meimei'
+      p4.age = 18
+      console.log(p4.name, p4.price, p4.age)
+
+      console.log('场景4')
+      // 场景4
+      class Component {
+        proxyId
+        constructor() {
+          // this.proxyId = Math.random().toString(36).slice(-8)
+          this.proxyId = new Proxy(
+            {
+              id: Math.random().toString(36).slice(-8)
+            },
+            {}
+          )
+        }
+        get id() {
+          return this.proxyId.id
+          // return this.proxyId
+        }
+        set id(val) {
+          return false
+        }
+      }
+      let com1 = new Component()
+      console.log(com1)
+      let com2 = new Component()
+      for (let i = 0; i < 10; i++) {
+        console.log(com1.id, com2.id)
+      }
+      com1.id = 'abcdefgh'
+      com2.id = 'abcdefgh'
+      console.log(com1.id, com2.id)
+
+      console.log('撤销代理')
+      // 撤销代理
+      let obj5 = {
+        name: 'Alex',
+        price: 190
+      }
+      let p5 = Proxy.revocable(obj5, {
+        get(target, key) {
+          if (key === 'price') {
+            return target[key] + 20
+          } else {
+            return target[key]
+          }
+        }
+      })
+      console.log(p5) // {proxy: Proxy, revoke: ƒ}
+      console.log(p5.proxy.price) // 210
+      setTimeout(() => {
+        p5.revoke()
+      }, 1000)
+      setTimeout(() => {
+        console.log(p5.proxy.price)
+        // Uncaught TypeError:
+        // Cannot perform 'get' on a proxy that has been revoked
+      }, 2000)
+    </script>
+  </body>
+</html>

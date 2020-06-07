@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>默认参数</title>
+  </head>
+  <body>
+    <script>
+      function func(x, y, z) {
+        y = y || 7
+        z = z || 42
+        return x + y + z
+      }
+      console.log(func(1)) // 50
+      console.log(func(1, 8, 43)) // 52
+
+      function func2(x = 2, y, z = x + y) {
+        console.log(Array.from(arguments))
+
+        // 可以获取到函数定义时，没有默认值的参数的个数
+        console.log('func2.length', func2.length) // 0
+        return x + y + z
+      }
+      console.log(func2(1, 2, 3))
+
+      function func3(x, y, z) {
+        return x + y + z
+      }
+      console.log(func3.length) // 3
+
+      function func4(x = 1, y, z) {
+        return x + y + z
+      }
+      console.log(func4.length) // 0
+    </script>
+  </body>
+</html>

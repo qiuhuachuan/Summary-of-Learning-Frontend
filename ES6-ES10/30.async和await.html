@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>async和await</title>
+  </head>
+  <body>
+    <script>
+      async function firstAsync() {
+        return 10 // 等价于 Promise.resolve(10)
+      }
+      console.log(firstAsync()) // Promise {<resolved>: 10}
+      firstAsync().then(value => {
+        console.log(value) // 10
+      })
+
+      async function secondAsync() {
+        let p = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve('now it is done')
+          }, 3000)
+        })
+        p.then(value => {
+          console.log(value) // 1. now it is done
+        })
+        console.log(await p) // await p是一个表达式 2. now it is done
+        console.log(await 20) // await Promise.resolve(20) 3. 20
+        console.log(30) // 4. 30
+        return 40 // Promise.resolve(40)
+      }
+      secondAsync().then(value => {
+        console.log(value) // 5. 40
+      })
+    </script>
+  </body>
+</html>

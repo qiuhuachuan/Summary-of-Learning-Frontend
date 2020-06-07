@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>getter和setter</title>
+  </head>
+  <body>
+    <script>
+      class Aminal {
+        type
+        #realAge // 私有属性
+        constructor(type, realAge) {
+          this.type = type
+          this.#realAge = realAge
+        }
+        get age() {
+          // age是暴露给实例对象操作的出入口
+          // 通过属性的形式访问和修改
+          return this.#realAge
+        }
+        set age(val) {
+          this.#realAge = val
+        }
+        eat() {
+          console.log('I am eating')
+        }
+      }
+      let dog = new Aminal('dog', 4)
+      console.log(dog)
+      console.log(dog.age) // 4
+      dog.age = 5
+      console.log(dog.age) // 5
+
+      // Uncaught SyntaxError:
+      // Private field '#realAge' must be declared
+      // in an enclosing class
+      // console.log(dog.#realAge)
+    </script>
+  </body>
+</html>

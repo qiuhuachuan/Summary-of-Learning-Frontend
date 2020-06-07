@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>创建新数组</title>
+  </head>
+  <body>
+    <script>
+      // 1 构造函数，仅接收一个参数时，为size
+      let arr1 = Array(5)
+      console.log(arr1)
+
+      // 2 数组字面量
+      let arr2 = [1, 2, 3, 4, 5]
+
+      // 3 Array.of
+      let arr3 = Array.of(1, 2, 3, 4, 5)
+      console.log(arr3)
+
+      // 4 Array.prototype.fill(value, startIndex, endIndex)
+      let arr4 = Array(5).fill(0)
+      console.log(arr4)
+    </script>
+  </body>
+</html>

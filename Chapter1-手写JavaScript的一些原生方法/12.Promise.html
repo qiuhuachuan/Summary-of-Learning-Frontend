@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手写Promise</title>
+  </head>
+  <body>
+    <script>
+      class _Promise {
+        value
+        reason
+        status
+        constructor(func) {
+          this.value = undefined
+          this.reason = undefined
+          this.status = 'PENDING'
+
+          // 维护一个resolve/pending的函数队列
+          this.resolvedFuncs = []
+          this.rejectedFuncs = []
+
+          const resolve = value => {
+            setTimeout(() => {
+              this.status = 'RESOLVED'
+              this.value = value
+              this.resolvedFuncs.forEach(
+                ({ func, resolve: res, reject: rej }) => res(func(value))
+              )
+            })
+          }
+
+          const reject = e => {
+            setTimeout(() => {
+              this.status = 'REJECTED'
+              this.reason = e
+              this.rejectedFuncs.forEach(
+                ({ func, resolve: res, reject: rej }) => rej(func(e))
+              )
+            })
+          }
+
+          func(resolve, reject)
+        }
+
+        static resolve(value) {
+          if (value && value.then) {
+            return value
+          }
+          return new _Promise(resolve => resolve(value))
+        }
+
+        then(fn) {
+          if (this.status === 'RESOLVED') {
+            const result = fn(this.value)
+            // 需要返回一个 Promise
+            // 如果状态为 resolved，直接执行
+            return Prom.resolve(result)
+          }
+          if (this.status === 'PENDING') {
+            // 也是返回一个 Promise
+            return new Prom((resolve, reject) => {
+              // 推进队列中，resolved 后统一执行
+              this.resolveFns.push({ fn, resolve, reject })
+            })
+          }
+        }
+
+        catch(fn) {
+          if (this.status === 'REJECTED') {
+            const result = fn(this.value)
+            return Prom.resolve(result)
+          }
+          if (this.status === 'PENDING') {
+            return new Prom((resolve, reject) => {
+              this.rejectFns.push({ fn, resolve, reject })
+            })
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

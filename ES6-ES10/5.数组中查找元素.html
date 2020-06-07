@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数组中查找元素</title>
+  </head>
+  <body>
+    <script>
+      // 遍历 转换 生成 查找
+
+      let arr = [1, 2, 3, 4, 3]
+      // filter关注所有元素，把满足条件的元素全部返回
+      let findResult = arr.filter(item => item === 3)
+      console.log(findResult) // [3, 3]
+
+      // Array.prototype.find 验证有还是没有
+      // 只要找到，就将该值返回
+      let result = arr.find(function (item) {
+        return item % 2 === 0
+      })
+      console.log(result)
+
+      // Array.prototype.findIndex 验证有还是没有
+      // 只要找到，就将该值的索引返回
+      let index = arr.findIndex(function (item) {
+        return item % 2 === 0
+      })
+      console.log(index)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>展开运算符</title>
+  </head>
+  <body>
+    <script>
+      // 传入的数据是确定的，且为数组
+      let arr = [3, 4, 5]
+      function sum(x, y, z) {
+        return x + y + z
+      }
+      // console.log(sum(arr[0], arr[1], arr[2]))
+      // console.log(sum.apply(null, arr))
+      console.log(sum(...arr))
+    </script>
+  </body>
+</html>

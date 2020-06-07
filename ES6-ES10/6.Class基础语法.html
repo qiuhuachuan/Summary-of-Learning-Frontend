@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class基础语法</title>
+  </head>
+  <body>
+    <script>
+      // ES5
+      let Animal = function (type, age) {
+        this.type = type
+        this.age = age
+      }
+
+      Animal.prototype.eat = function () {
+        console.log('I am eating')
+      }
+
+      let dog = new Animal('dog', 6)
+      console.log(dog)
+      let monkey = new Animal('monkey', 5)
+      console.log(monkey, monkey.constructor)
+      // monkey.constructor === Animal // true
+
+      // ES6
+      class Person {
+        name
+        age
+        constructor(name, age) {
+          this.name = name
+          this.age = age
+        }
+        speak() {
+          console.log('I am speaking.')
+        }
+      }
+      let p = new Person('Tom', 18)
+      console.log(p, p.constructor)
+      p.speak()
+      console.log(p instanceof Person) // true
+      console.log(typeof Person) // function
+    </script>
+  </body>
+</html>

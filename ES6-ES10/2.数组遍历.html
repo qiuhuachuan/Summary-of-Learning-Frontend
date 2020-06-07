@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数组遍历</title>
+  </head>
+  <body>
+    <script>
+      console.log('普通遍历')
+      let arr = [1, 2, 3, 4, 5, 6]
+      for (let i = 0; i < arr.length; i++) {
+        // 支持break和continue
+        console.log(arr[i])
+      }
+
+      console.log(' forEach --------')
+      arr.forEach(function (value, index, arr) {
+        // 不支持break和continue
+        // if (value === 2) {
+        //   continue
+        // }
+        console.log(index, value, arr)
+      })
+
+      console.log(' every --------')
+      arr.every(function (value, index, arr) {
+        if (value === 2) {
+          // break // 不支持break和continue
+        } else {
+          console.log(value)
+        }
+        // 只有返回值为true时，才会依次遍历
+        return true
+      })
+
+      console.log(' for...in --------')
+      // for ... in 会把数组中非数字索引(所有key)遍历出来
+      arr.a = 8
+      for (let index in arr) {
+        // 专为普通对象设计
+        // 支持break和continue
+        console.log(index, '--', arr[index])
+      }
+
+      console.log(' for...of --------')
+      for (const value of arr) {
+        // 用于可迭代的对象
+        // 支持break和continue
+        console.log(value)
+      }
+
+      console.log(' 案例：遍历普通对象 --------')
+      const Price = {
+        A: [1.5, 2.3, 4.5],
+        B: [3, 4, 5],
+        C: [0.5, 0.8, 1.2]
+      }
+      for (const key in Price) {
+        console.log(key, Price[key][0])
+      }
+    </script>
+  </body>
+</html>

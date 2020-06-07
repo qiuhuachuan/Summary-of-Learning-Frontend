@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>对象解构</title>
+  </head>
+  <body>
+    <script>
+      let options1 = {
+        title: 'menu',
+        width: 100,
+        height: 200
+      }
+      // 1 属性名重命名； 2 设置默认值无效
+      let { title: newTitle, width = 160, height } = options1
+      console.log(newTitle, width, height)
+      // menu 100 200
+
+      let options2 = {
+        title: 'menu',
+        width: 100,
+        height: 200
+      }
+      // 剩余数据
+      let { title, ...last } = options2
+      console.log(title, last)
+
+      let options = {
+        size: {
+          width3: 100,
+          height3: 200
+        },
+        items: ['Cake', 'Donut'],
+        extra: true
+      }
+      let {
+        size: { width3, height3 },
+        items: [item1]
+      } = options
+      console.log(width3, height3, item1)
+    </script>
+  </body>
+</html>

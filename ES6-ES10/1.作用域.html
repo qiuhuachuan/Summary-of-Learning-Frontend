@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>作用域</title>
+  </head>
+  <body>
+    <script>
+      // ## 1 作用域
+
+      // #### 1 块级作用域
+      // let和const属于块级作用域
+      // 用let和const声明的变量不存在变量提升，需要先声明，后使用
+      // let可以只声明
+      // const必须声明和初始化，且不允许重复定义和赋值
+
+      // let a = 'Hello'
+      // let a = 'World' // 同一作用域中不能使用let重复定义已经使用let声明的标识符
+      // var a = 'World' // 同一作用域中不能使用var重复定义已经使用let声明的标识符
+
+      // var b = 'world'
+      // console.log(b)
+      // console.log(window.b) // 也可以通过window对象访问
+      // let b = 'Bye' // 同一作用域中不能使用let重复定义已经使用var声明的标识符
+
+      {
+        let blockA = '666'
+        const blockB = '888'
+      }
+      // console.log(blockA) // 花括号外无法访问到blockA变量
+      // console.log(blockB) // 花括号外无法访问到blockB变量
+
+      // #### 2 全局作用域
+      var c = 123 // 全局变量，不能被删除
+      console.log(delete c) // delete c的返回结果为false
+      console.log(delete window.c) // delete window.c的返回结果为false
+      d = 456 // 作为全局对象window的属性，可以被删除，即delete d(= delete window.d)的结果为true
+      console.log(delete d) // true
+      console.log(delete window.d) // true
+
+      function sayHi() {
+        e = 'Hi' // 等价于window.e
+      }
+      sayHi()
+      console.log(e)
+      console.log(window.e)
+
+      // #### 3 函数作用域
+      function test() {
+        var f = 'Bye world'
+        console.log(f) // 变量f属于函数作用域
+      }
+      test() // 使用闭包或return语句返回函数作用域内的变量
+
+      // #### 4 动态作用域this
+      window.propA = 50
+      function thisFunc() {
+        // 'use strict'
+        // 严格模式下，this指向异常
+        // 非严格模式，this默认指向window
+        console.log(this.propA)
+      }
+      thisFunc() // 50
+      thisFunc.bind({ propA: 100 })() // 100
+      thisFunc.call({ propA: 200 }) // 200
+      thisFunc.apply({ propA: 300 }) // 300
+
+      // const定义变量时必须初始化
+      // const variavleA // 缺少初始化，报错
+
+      // console.log(temp)
+      // Cannot access 'temp' before initialization
+      // 存在临时性死区
+      // let temp = 1
+    </script>
+  </body>
+</html>

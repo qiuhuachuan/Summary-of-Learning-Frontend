@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>剩余参数</title>
+  </head>
+  <body>
+    <script>
+      function sum1() {
+        let num = 0
+        // Array.prototype.forEach.call(arguments, function (item) {
+        //   num += +item
+        // })
+        Array.from(arguments).forEach(function (item) {
+          num += item
+        })
+        return num
+      }
+      console.log(sum1(1, 2, 3, 4))
+
+      function sum2(base, ...nums) {
+        let num = 0
+        nums.forEach(function (item) {
+          num += +item
+        })
+        return base * 2 + num
+      }
+      console.log(sum2(1, 2, 3, 4))
+    </script>
+  </body>
+</html>

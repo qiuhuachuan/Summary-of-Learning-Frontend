@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>回调函数</title>
+  </head>
+  <body>
+    <script>
+      // function loadScript(src) {
+      //   let scriptElement = document.createElement('script')
+      //   scriptElement.src = src
+      //   document.head.append(scriptElement)
+      // }
+
+      // function test() {
+      //   console.log('test')
+      // }
+
+      // loadScript('./1.js')
+      // test() // 先执行test函数 再执行1.js内的代码(事件循环)
+      // // 输出： test 1
+
+      // // 多个回调嵌套时
+      // function loadScript2(src, cb) {
+      //   let scriptElement = document.createElement('script')
+      //   scriptElement.src = src
+      //   document.head.append(scriptElement) // 宏任务1
+      //   // 宏任务2 打印脚本名称
+      //   scriptElement.onload = () => {
+      //     cb(src)
+      //   }
+      //   scriptElement.onerror = err => {
+      //     cb(err)
+      //   }
+      // }
+      // // 回调地狱
+      // loadScript2('./1.js', function (script) {
+      //   if (script.type === 'error') {
+      //     // 监控上报逻辑
+      //     console.log(script.type)
+      //   } else {
+      //     console.log(script)
+      //     loadScript2('./2.js', function (script) {
+      //       console.log(script)
+      //       loadScript2('./3.js', function (script) {
+      //         console.log(script)
+      //       })
+      //     })
+      //   }
+      // })
+
+      // Promise
+      function loadScript3(src) {
+        // 1 返回的Promise，没有调用then方法时执行了什么
+        // 2 Promise的状态是如何被改变的：通过resolve或reject来改变状态，状态不可逆
+        // 3 Promise的结果是如何传递数据的
+        // 关注state: pending和result: undefined
+        return new Promise((resolve, reject) => {
+          let script = document.createElement('script')
+          script.src = src
+          script.onload = () => {
+            resolve(src) // fulfilled, result
+          }
+          script.onerror = () => {
+            reject(src) // rejected, error
+          }
+          document.head.append(script)
+        })
+      }
+      // 不规范的使用方式
+      // loadScript3('./1.js')
+      //   .then(loadScript3('./2.js')) // loadScript("./2.js")会作为表达式进行计算
+      //   .then(loadScript3('./3.js'))
+      // 正确方式如下
+      // loadScript3('./1.js')
+      //   .then(
+      //     content => {
+      //       console.log(content)
+      //       return loadScript3('./2.js') // 必须手动添加return
+      //     },
+      //     err => {
+      //       console.log(err)
+      //     }
+      //   )
+      //   .then(
+      //     content => {
+      //       console.log(content)
+      //       return loadScript3('./3.js')
+      //     },
+      //     err => {
+      //       console.log(err)
+      //     }
+      //   )
+      //   .then(
+      //     content => {
+      //       console.log(content)
+      //     },
+      //     err => {
+      //       console.log(err)
+      //     }
+      //   )
+
+      // Promise.prototype.then
+      // .then(onFulFilled, onRejected) 这两个参数都是函数类型，与resolve和reject息息相关
+      // 如果这个参数为非函数或者onFulFilled和onRejected没有写入
+      // .then会返回一个新的空的Promise实例
+
+      // resolve和reject
+      // function test(bool) {
+      //   if (bool) {
+      //     return new Promise((resolve, reject) => {
+      //       resolve(30)
+      //     })
+      //   } else {
+      //     return Promise.reject('error') // Promise.reject()静态方法
+      //   }
+      // }
+      // test(false).then(
+      //   value => {
+      //     console.log(value)
+      //   },
+      //   err => {
+      //     console.log(err)
+      //   }
+      // )
+
+      // Promise.prototype.catch() 异常捕获
+      // function loadScript4(src) {
+      //   return new Promise((resolve, reject) => {
+      //     let script = document.createElement('script')
+      //     script.src = src
+      //     script.onload = () => {
+      //       resolve(src) // fulfilled, result
+      //     }
+      //     script.onerror = () => {
+      //       reject(src) // rejected, error
+      //     }
+      //     document.head.append(script)
+      //   })
+      // }
+      // loadScript4('./1.js')
+      //   .then(() => {
+      //     return loadScript4('./2.js') // 必须手动添加return
+      //   })
+      //   .then(() => {
+      //     return loadScript4('./3.js')
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
+
+      // Promise.all()
+      const p1 = new Promise((resolve, reject) => {
+        setTimeout(function () {
+          resolve(1)
+        }, 1000)
+      })
+      const p2 = new Promise((resolve, reject) => {
+        setTimeout(function () {
+          resolve(2)
+        }, 500)
+      })
+      const p3 = new Promise((resolve, reject) => {
+        setTimeout(function () {
+          resolve(3)
+        }, 1500)
+      })
+      Promise.all([p1, p2, p3]).then(value => {
+        console.log(value)
+      })
+
+      // Promise.race()
+      Promise.race([p1, p2, p3]).then(function (value) {
+        console.log(value)
+      })
+    </script>
+  </body>
+</html>

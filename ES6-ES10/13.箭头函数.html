@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>箭头函数</title>
+  </head>
+  <body>
+    <script>
+      let sayHello = (name, city) => {
+        console.log('Hello world!')
+        console.log(name, city)
+      }
+      sayHello('China', 'Beijing')
+
+      // eval会将最外层的对象指向{}
+      /* 箭头函数中没有this绑定，必须通过查找作用域链来决定其值。
+       ** 如果箭头函数被非箭头函数包含，则this绑定的是最近一层非箭头函数的this
+       ** 否则，this的值会被设置为全局对象
+       **/
+      let test = {
+        color: 'red',
+        say() {
+          return () => {
+            console.log(this.color) // 最近一层的非箭头函数为say
+            console.log(this)
+          }
+        },
+        speak: () => {
+          console.log(this.color)
+          console.log(this) // window
+        }
+      }
+      test.say()()
+      test.speak()
+    </script>
+  </body>
+</html>

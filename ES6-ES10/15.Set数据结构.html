@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Set数据结构</title>
+  </head>
+  <body>
+    <script>
+      // let s = new Set()
+      // Set接收一个可遍历对象
+      let s = new Set([1, 2, 3, 4, 1, 2, 3, 4])
+      console.log(s) // Set中的元素不重复
+      // Set(4) {1, 2, 3, 4}
+
+      // 1 添加数据
+      s.add('Hello')
+      s.add('Hello')
+      s.add('Good bye')
+      s.add('Hello').add('Good bye') // 链式调用
+      console.log(s) // Set(6) {1, 2, 3, 4, "Hello", 'Good bye'}
+
+      // 2 删除数据
+      s.delete('Hello')
+      console.log(s) // Set(5) {1, 2, 3, 4, "Good bye"}
+
+      // 3 查找数据
+      console.log(s.has(1), s.size) // true 5
+
+      // 4 读取数据
+      console.log('keys', s.keys()) // SetIterator {1, 2, 3, 4, "Good bye"}
+      console.log('values', s.values()) // SetIterator {1, 2, 3, 4, "Good bye"}
+      console.log('entries', s.entries())
+      // SetIterator {1 => 1, 2 => 2, 3 => 3, 4 => 4, "Good bye" => "Good bye"}
+
+      s.forEach(function (item, key) {
+        console.log(item, key)
+      })
+      for (const item of s) {
+        console.log(item)
+      }
+
+      // 3 清空数据
+      s.clear()
+      console.log(s)
+    </script>
+  </body>
+</html>

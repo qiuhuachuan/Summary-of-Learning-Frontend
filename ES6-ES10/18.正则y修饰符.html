@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>正则y修饰符</title>
+  </head>
+  <body>
+    <script>
+      const str = 'aaa_aa_aaaaa'
+      const re1 = /a+/g
+      const re2 = /a+/y // sticky 连续匹配
+
+      console.log(re1.exec(str))
+      // ["aaa", index: 0, input: "aaa_aa_aaaaa", groups: undefined]
+      console.log(re2.exec(str))
+      // ["aaa", index: 0, input: "aaa_aa_aaaaa", groups: undefined]
+
+      console.log(re1.exec(str))
+      // ["aa", index: 4, input: "aaa_aa_aaaaa", groups: undefined]
+      console.log(re2.exec(str))
+      // null
+
+      console.log(re1.exec(str))
+      // ["aaaaa", index: 7, input: "aaa_aa_aaaaa", groups: undefined]
+      console.log(re2.exec(str))
+      // ["aaa", index: 0, input: "aaa_aa_aaaaa", groups: undefined]
+    </script>
+  </body>
+</html>

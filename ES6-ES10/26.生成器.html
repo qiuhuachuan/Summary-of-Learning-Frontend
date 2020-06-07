@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>生成器</title>
+  </head>
+  <body>
+    <script>
+      function loop1() {
+        for (let i = 0; i < 5; i++) {
+          console.log(i)
+        }
+      }
+      loop1()
+
+      function* loop2() {
+        for (let i = 0; i < 5; i++) {
+          yield i
+        }
+      }
+      const l2 = loop2()
+      console.log(l2)
+      for (let value of l2) {
+        console.log(value)
+      }
+      console.log(l2.next())
+      console.log('--------')
+
+      function* gen1() {
+        let val
+        val = yield 1
+        console.log(val) // undefined
+      }
+      const g1 = gen1()
+      console.log(g1.next()) // 遇到yield关键字就停下 {value: 1, done: false}
+      console.log(g1.next()) // yield表达式的返回值为undefined
+
+      console.log('g2--------')
+      function* gen2() {
+        let val
+        val = yield* [1, 2, 3]
+        // yield后加*号，表示后面是一个可迭代对象（可遍历对象或者生成器对象）
+        console.log(val)
+      }
+      const g2 = gen2()
+      console.log(g2.next())
+      console.log(g2.next())
+
+      console.log('g3--------')
+      function* gen3() {
+        let val
+        val = (yield [1, 2, 3]) + 7
+        console.log(val) // 27
+      }
+      const g3 = gen3()
+      console.log(g3.next(10))
+      // console.log(g3.return(100)) // 终止迭代器 {value: 100, done: true}
+      console.log(g3.next(20)) // 20赋值给yield表达式，不传参数时返回值为undefined
+
+      console.log('g4--------')
+      function* gen4() {
+        while (true) {
+          try {
+            yield 1
+          } catch (e) {
+            console.log(e.message)
+          }
+        }
+      }
+      const g4 = gen4()
+      console.log(g4.next())
+      console.log(g4.next())
+      console.log(g4.next())
+      console.log(g4.next())
+      g4.throw(new Error('error'))
+      // 外部向内部抛出异常，程序并不会终止，内部使用try...catch进行异常捕获
+      console.log(g4.next())
+
+      console.log('---- 实战 ----')
+      // 实战：年会抽奖
+      // ES5
+      function drawPrice1(first = 1, second = 3, third = 5) {
+        let firstPrice = [
+          '1A',
+          '1B',
+          '1C',
+          '1D',
+          '1E',
+          '1F',
+          '1G',
+          '1H',
+          '1I',
+          '1J',
+          '1K'
+        ]
+        let secondPrice = [
+          '2A',
+          '2B',
+          '2C',
+          '2D',
+          '2E',
+          '2F',
+          '2G',
+          '2H',
+          '2I',
+          '2J',
+          '2K'
+        ]
+        let thirdPrice = [
+          '3A',
+          '3B',
+          '3C',
+          '3D',
+          '3E',
+          '3F',
+          '3G',
+          '3H',
+          '3I',
+          '3J',
+          '3K'
+        ]
+        let result = []
+        let random
+        // 抽一等奖
+        for (let i = 0; i < first; i++) {
+          random = Math.floor(Math.random() * firstPrice.length)
+          result = result.concat(firstPrice.splice(random, 1))
+        }
+        // 抽二等奖
+        for (let i = 0; i < second; i++) {
+          random = Math.floor(Math.random() * secondPrice.length)
+          result = result.concat(secondPrice.splice(random, 1))
+        }
+        // 抽三等奖
+        for (let i = 0; i < third; i++) {
+          random = Math.floor(Math.random() * thirdPrice.length)
+          result = result.concat(thirdPrice.splice(random, 1))
+        }
+        return result
+      }
+      let t1 = drawPrice1()
+      for (let value of t1) {
+        console.log(value)
+      }
+
+      // ES6优化
+      function* drawPrice2(first = 1, second = 3, third = 5) {
+        let firstPrice = [
+          '1A',
+          '1B',
+          '1C',
+          '1D',
+          '1E',
+          '1F',
+          '1G',
+          '1H',
+          '1I',
+          '1J',
+          '1K'
+        ]
+        let secondPrice = [
+          '2A',
+          '2B',
+          '2C',
+          '2D',
+          '2E',
+          '2F',
+          '2G',
+          '2H',
+          '2I',
+          '2J',
+          '2K'
+        ]
+        let thirdPrice = [
+          '3A',
+          '3B',
+          '3C',
+          '3D',
+          '3E',
+          '3F',
+          '3G',
+          '3H',
+          '3I',
+          '3J',
+          '3K'
+        ]
+        let count = 0
+        let random
+        while (true) {
+          if (count < first) {
+            random = Math.floor(Math.random() * firstPrice.length)
+            yield firstPrice.splice(random, 1)[0]
+            count++
+          } else if (count < first + second) {
+            random = Math.floor(Math.random() * secondPrice.length)
+            yield secondPrice.splice(random, 1)[0]
+            count++
+          } else if (count < first + second + third) {
+            random = Math.floor(Math.random() * thirdPrice.length)
+            yield thirdPrice.splice(random, 1)[0]
+            count++
+          } else {
+            return false
+          }
+        }
+      }
+      let d2 = drawPrice2()
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+      console.log(d2.next().value)
+
+      console.log('--------')
+      function* count(x = 1) {
+        while (true) {
+          if (x % 3 === 0) {
+            yield x
+          }
+          x++
+        }
+      }
+      let num = count()
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+      console.log(num.next().value)
+
+      console.log('迭代器')
+      function* gen5() {
+        let val
+        val = yield* [1, 2, 3]
+        console.log(val) // undefined
+      }
+      const g5 = gen5() // g5是迭代器
+      for (let value of g5) {
+        console.log(value)
+      }
+    </script>
+  </body>
+</html>

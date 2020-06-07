@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reflect</title>
+  </head>
+  <body>
+    <script>
+      // 1. Reflect.apply(function, thisArg, Arr)
+      // 不存在Reflect.call()
+      // Java 的反射机制是在编译阶段不知道是哪个类被加载，而是在运行的时候才加载、执行
+      console.log(Math.floor.apply(null, [3.72])) // 3
+      console.log(Reflect.apply(Math.ceil, null, [3.72])) // 4
+      // Math.ceil
+      let price = 91.5
+      if (price > 100) {
+        price1 = Math.floor.apply(null, [price])
+      } else {
+        price1 = Math.ceil.apply(null, [price])
+      }
+      price2 = Reflect.apply(price > 100 ? Math.floor : Math.ceil, null, [
+        price
+      ])
+      console.log(price1)
+      console.log(price2)
+
+      // 2. Reflect.construct()
+      let d1 = new Date()
+      console.log(d1.getTime())
+      let d2 = Reflect.construct(Date, [])
+      console.log(d2.getTime())
+      console.log(d1 instanceof Date) // true
+      console.log(d2 instanceof Date) // true
+
+      // 3. Reflect.defineProperty()
+      let obj = {}
+      let result1 = Reflect.defineProperty(obj, 'name', {
+        value: 'Mike'
+      }) // 返回true
+      console.log(result1) // true
+      let result2 = Object.defineProperty(obj, 'age', {
+        value: 18
+      }) // 返回目标对象
+      console.log(result2) // {name: "Mike", age: 18}
+      console.log(obj)
+
+      // 4. Reflect.deleteProperty()
+      const obj2 = { x: 1, y: 2 }
+      let result3 = Reflect.deleteProperty(obj2, 'x')
+      console.log(result3) // 不论是否成功删除，均返回true
+      console.log(obj2) // {y: 2}
+
+      // 5. Reflect.get()
+      console.log(Reflect.get(obj2, 'y')) // 2 对象根据key取值
+      console.log(Reflect.get([3, 4, 5, 6, 7], 3)) // 6 数组根据索引取值
+
+      // 6. Reflect.getOwnPropertyDescriptor()
+      console.log(Reflect.getOwnPropertyDescriptor(obj2, 'y'))
+      // {value: 2, writable: true, enumerable: true, configurable: true}
+      console.log(Object.getOwnPropertyDescriptor(obj2, 'y'))
+      // {value: 2, writable: true, enumerable: true, configurable: true}
+
+      // 7. Reflect.getPrototypeOf()
+      let d3 = new Date()
+      console.log(Reflect.getPrototypeOf(d3) === Date.prototype) // true
+
+      // 8. Reflect.has()
+      let obj3 = { x: 1, y: 2 }
+      console.log(Reflect.has(obj3, 'x')) // true
+
+      // 9. Reflect.isExtensible()
+      Object.freeze(obj3)
+      obj3.z = 3
+      console.log(Reflect.isExtensible(obj3)) // false
+      console.log(obj3)
+
+      // 10. Reflect.ownKeys()
+      let keys = Reflect.ownKeys(obj3) // ["x", "y"]
+      console.log(keys)
+      console.log(Reflect.ownKeys([1, 2])) // ["0", "1", "length"]
+      // Symbol
+
+      // 11. Reflect.preventExtensions()
+      const obj4 = { apple: 'red', banana: 'yellow' }
+      console.log(Reflect.isExtensible(obj4)) // true
+      Reflect.preventExtensions(obj4)
+      console.log(Reflect.isExtensible(obj4)) // false
+
+      // 12. Reflect.set()
+      const obj5 = { apple: 'red', banana: 'yellow' }
+      Reflect.set(obj5, 'orange', 'orange')
+      console.log(obj5)
+      const arr1 = ['apple', 'banana', 'orange', 'cherry']
+      Reflect.set(arr1, 2, 'peach')
+      console.log(arr1)
+
+      // 13. Reflect.setPrototypeOf()
+      const arr2 = ['apple', 'banana', 'orange']
+      console.log(Reflect.getPrototypeOf(arr2))
+      Reflect.setPrototypeOf(arr2, String.prototype)
+      console.log(Reflect.getPrototypeOf(arr2))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object</title>
+  </head>
+  <body>
+    <script>
+      let grade = {
+        Lilei: 96,
+        Hangmeimei: 99
+      }
+      let result1 = []
+      for (let key in grade) {
+        if (key === 'Lilei') {
+          result1.push(key)
+        }
+      }
+      console.log(result1) // ["Lilei"]
+
+      console.log(Object.keys(grade).filter(item => item === 'Lilei'))
+      // ["Lilei"]
+      console.log(Object.values(grade)) // [96, 99]
+      console.log(Object.entries(grade)) // [["Lilei", 96], ["Hangmeimei", 99]]
+
+      let result2 = []
+      for (let [key, value] of Object.entries(grade)) {
+        if (key === 'Lilei') {
+          result2.push(key)
+        }
+      }
+      console.log(result2) // ["Lilei"]
+    </script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template模版语法</title>
+  </head>
+  <body>
+    <script>
+      const a = 20
+      const b = 10
+      const c = 'javascript'
+
+      const str1 = 'my age is ' + (a + b) + '. I love ' + c + '.'
+      const str2 = `my age is ${a + b}. I love ${c}.`
+      console.log(str1)
+      console.log(str2)
+
+      const type = 'retail'
+      function func(type) {
+        const retailPrice = 20
+        const wholeSalePrice = 16
+        let showTxt = ''
+
+        if (type === 'retail') {
+          showTxt = '您此次的购买单价是:' + retailPrice
+        } else {
+          showTxt = '您此次的购买批发价是' + wholeSalePrice
+        }
+        return showTxt
+      }
+      console.log(func(type))
+
+      // 1 定义一个函数
+      function Price(allStrings, type) {
+        let s1 = allStrings[0]
+        console.log(allStrings) // ["您此次的", "", raw: Array(2)]
+        console.log(type) // wholeSale
+        const retailPrice = 20
+        const wholeSalePrice = 16
+        let showTxt = ''
+        if (type === 'retail') {
+          showTxt = '购买单价是：' + retailPrice
+        } else {
+          showTxt = '购买批发价是：' + wholeSalePrice
+        }
+        return `${s1}${showTxt}`
+      }
+      // 2 调用模版函数
+      let showTxt = Price`您此次的${'wholeSale'}`
+      console.log(showTxt)
+
+      // 字符串换行
+      let str = `我是第一行
+      我是第二行`
+      console.log(str)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>静态方法</title>
+  </head>
+  <body>
+    <script>
+      // ES5 静态方法
+      // let Animal = function (type) {
+      //   this.type = type
+      // }
+      // // 添加类的静态方法
+      // Animal.walk = function () {
+      //   console.log('I am walking')
+      // }
+      // Animal.prototype.eat = function () {
+      //   Animal.walk()
+      //   console.log('I am eating.')
+      // }
+      // let dog = new Animal('dog')
+      // dog.eat()
+      // console.log(dog)
+      // Animal.walk()
+
+      // ES6 静态方法
+      class Animal {
+        type
+        constructor(type) {
+          this.type = type
+        }
+        eat() {
+          Animal.walk() // 调用类的静态方法
+          console.log('I am eating.')
+        }
+        // 添加类的静态方法，使用static关键字
+        static walk() {
+          console.log('I am walking')
+        }
+      }
+
+      let dog = new Animal('dog')
+      dog.eat()
+      Animal.walk()
+    </script>
+  </body>
+</html>

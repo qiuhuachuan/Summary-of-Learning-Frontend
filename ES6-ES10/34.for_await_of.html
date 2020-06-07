@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>for_await_of</title>
+  </head>
+  <body>
+    <script>
+      function Gen1(time) {
+        return new Promise((resolve, reject) => {
+          setTimeout(function () {
+            resolve(time)
+          }, time)
+        })
+      }
+
+      async function test1() {
+        let arr = [Gen1(2000), Gen1(100), Gen1(3000)]
+        for (let item of arr) {
+          console.log(
+            'test1',
+            Date.now(),
+            item.then(function (value) {
+              console.log(value)
+            })
+          )
+        }
+      }
+      test1()
+
+      async function test2() {
+        let arr = [Gen1(2000), Gen1(100), Gen1(3000)]
+        for await (let item of arr) {
+          console.log('test2', Date.now(), item)
+        }
+      }
+      test2()
+
+      const obj = {
+        count: 0,
+        Gen(time) {
+          return new Promise((resolve, reject) => {
+            setTimeout(function () {
+              resolve({ done: false, value: time })
+            }, time)
+          })
+        },
+        [Symbol.asyncIterator]() {
+          let _this = this
+          return {
+            next() {
+              _this.count++
+              if (_this.count < 4) {
+                return _this.Gen(Math.floor(Math.random() * 1000))
+              } else {
+                return Promise.resolve({ done: true, value: '' })
+              }
+            }
+          }
+        }
+      }
+      async function test3() {
+        for await (let item of obj) {
+          console.log('test3', Date.now(), item)
+        }
+      }
+      test3()
+    </script>
+  </body>
+</html>

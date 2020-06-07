@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>对象数据描述符</title>
+  </head>
+  <body>
+    <script>
+      const data = {
+        PortLand: '78/50',
+        Dubin: '88/52',
+        Lily: '58/40'
+      }
+      Reflect.defineProperty(data, 'Lily', {
+        enumerable: false,
+        writable: false
+      })
+      console.log(Object.keys(data)) // ["PortLand", "Dubin"]
+      console.log(Object.getOwnPropertyDescriptor(data, 'Lily'))
+      console.log(Object.getOwnPropertyDescriptors(data))
+
+      data.Lily = '59/50'
+      console.log(data.Lily) // 58/40
+    </script>
+  </body>
+</html>

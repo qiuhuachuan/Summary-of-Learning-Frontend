@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>继承</title>
+  </head>
+  <body>
+    <script>
+      // ES5 继承
+      // let Animal = function (type) {
+      //   this.type = type
+      // }
+      // // 添加类的静态方法
+      // Animal.walk = function () {
+      //   console.log('I am walking')
+      // }
+      // // 实例方法
+      // Animal.prototype.eat = function () {
+      //   Animal.walk()
+      //   console.log('I am eating.')
+      // }
+
+      // // ES5 类的继承
+      // let Dog = function () {
+      //   // 初始化父类的构造函数，父类的属性挂载到当前的对象上
+      //   Animal.call(this, 'dog')
+      //   this.run = function () {
+      //     console.log('I can run')
+      //   }
+      // }
+      // // 改变原型链指向
+      // Dog.prototype = Animal.prototype
+      // Dog.prototype.bark = function () {
+      //   console.log('The small dog is barking')
+      // }
+
+      // let newDog = new Dog()
+      // console.log(newDog)
+      // newDog.eat()
+      // newDog.bark()
+
+      // let monkey = new Animal('monkey')
+      // monkey.bark()
+
+      // ES6 继承
+      class Animal {
+        type
+        constructor(type) {
+          this.type = type
+        }
+        eat() {
+          Animal.walk()
+          console.log('I am eating')
+        }
+        static walk() {
+          console.log('I am walking')
+        }
+      }
+
+      class Dog extends Animal {
+        age
+        constructor(type) {
+          super(type)
+          this.age = 2
+        }
+        bark() {
+          console.log('The dog is barking')
+        }
+      }
+      let dog = new Dog('dog')
+      console.log(dog)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ES10</title>
+  </head>
+  <body>
+    <script>
+      // JSON.stringify进行能力修补
+      // 0xD800-0xDFFF无法编码为utf-8，导致无法正常显示
+      console.log(JSON.stringify('\u{D800}')) // "\ud800"
+
+      // 数组扁平化 Array.prototype.flat(depth)按照一个深度递归遍历
+      let arr1 = [1, [2, 3], [4, 5, [6, 7, [8, 9]]]]
+      console.log(arr1.flat(Infinity))
+
+      // 先map后flat
+      // Array.protptype.flatMap()
+      let arr2 = [1, 2, 3]
+      console.log(
+        arr2.flatMap(function (item) {
+          return [item * 2]
+        })
+      )
+
+      // String.prototype.trimStart()
+      // String.prototype.trimEnd()
+      // trimStart trimEnd
+      let str = '     foo      '
+      console.log(str.replace(/^\s*|\s*$/g, '')) // 利用正则
+      console.log(str.trimStart()) // trimStart等价于trimLeft
+      console.log(str.trimRight()) // trimEnd等价于trimRight
+      console.log(str.trim())
+      console.log(str.toLocaleUpperCase())
+
+      // String.prototype.matchAll()
+      let str2 = `"foo" and "bar" and "baz"`
+      function select(regExp, str) {
+        const matches = []
+        while (true) {
+          const match = regExp.exec(str)
+          if (match === null) break
+          matches.push(match[1])
+        }
+        return matches
+      }
+      console.log(select(/"(\w*)"/g, str2)) // ["foo", "bar", "baz"]
+      console.log(select(/"(.*?)"/g, str2)) // ["foo", "bar", "baz"]
+      console.log(str2.match(/"([^"]*)"/g)) // 捕获与完整匹配
+      // [""foo"", ""bar"", ""baz""]
+
+      function select2(regExp, str) {
+        const matches = []
+        str.replace(regExp, function (all, first) {
+          matches.push(first)
+        })
+        return matches
+      }
+      console.log(select2(/"([^"]*)"/g, str2))
+      // ["foo", "bar", "baz"]
+      function select3(regExp, str) {
+        const matches = []
+        for (const match of str.matchAll(regExp)) {
+          matches.push(match[1])
+        }
+        return matches
+      }
+      console.log(select3(/"([^"]*)"/g, str2))
+      // ["foo", "bar", "baz"]
+
+      // Object.fromEntries()
+      const arr3 = [
+        ['foo', 1],
+        ['bar', 2]
+      ]
+      const obj1 = Object.fromEntries(arr3)
+      console.log(obj1.bar) // 2
+
+      const obj2 = {
+        aaa: 1,
+        bbb: 2,
+        ccccc: 3
+      }
+      const arr4 = Object.entries(obj2)
+      console.log(arr4)
+
+      console.log(
+        Object.fromEntries(
+          arr4.filter(function ([key, val]) {
+            return key.length === 3
+          })
+        )
+      )
+
+      // try...catch
+      // try {
+      // } catch {}
+
+      // BigInt数据类型 处理超过2^53以外的数字
+      let a = 11n
+      console.log(a, typeof a)
+
+      const parseQueryString = url => {
+        let arr = url.substring(url.indexOf('?') + 1).split('&')
+        let arrEntries = arr.map(item => item.split('='))
+        console.log(arrEntries)
+        return Object.fromEntries(arrEntries)
+      }
+      console.log(
+        parseQueryString(
+          'https://www.baidu.com/s?wd=python&rsv_spt=1&rsv_iqid=0xb5e754ed0003bafe&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=tb&rsv_sug3=7&rsv_sug1=6&rsv_sug7=100&rsv_sug2=0&rsv_btype=i&inputT=1701&rsv_sug4=2471'
+        )
+      )
+    </script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>迭代器</title>
+  </head>
+  <body>
+    <script>
+      let authors = {
+        allAuthors: {
+          fiction: ['A', 'B', 'C'],
+          science: ['D', 'E', 'F'],
+          fantasy: ['G', 'H', 'I']
+        },
+        Address: []
+      }
+      let arr = []
+      for (let [key, value] of Object.entries(authors.allAuthors)) {
+        arr = arr.concat(value)
+      }
+      console.log('arr', arr)
+
+      // 可迭代协议 next函数
+      // authors[Symbol.iterator] = function () {
+      //   // this
+      //   let allAuthors = this.allAuthors
+      //   let keys = Reflect.ownKeys(allAuthors)
+      //   let values = []
+      //   return {
+      //     next() {
+      //       if (!values.length) {
+      //         if (keys.length) {
+      //           values = allAuthors[keys[0]]
+      //           keys.shift()
+      //         }
+      //       }
+      //       return {
+      //         done: !values.length,
+      //         value: values.shift()
+      //       }
+      //     }
+      //   }
+      // }
+
+      // 可迭代协议 生成器函数
+      authors[Symbol.iterator] = function* () {
+        let allAuthors = this.allAuthors
+        let keys = Reflect.ownKeys(allAuthors)
+        let values = []
+        for (let item of keys) {
+          values = values.concat(allAuthors[item])
+        }
+        while (values.length) {
+          yield values.shift()
+        }
+        // while的另一种实现
+        // while (true) {
+        //   if (!values.length) {
+        //     if (keys.length) {
+        //       values = allAuthors[keys[0]];
+        //       keys.shift();
+        //       yield values.shift();
+        //     } else {
+        //       return false;
+        //     }
+        //   } else {
+        //     yield values.shift();
+        //   }
+        // }
+      }
+
+      let arr2 = []
+      for (let value of authors) {
+        arr2.push(value)
+      }
+      console.log('arr2', arr2)
+      console.log(authors[Symbol.iterator]().next())
+      // {value: "A", done: false}
+
+      // 1 迭代器协议：必须返回一个对象，含有一个next方法，并且next方法返回一个对象，该对象含有done和value
+      // 2 可迭代协议：在对象上添加属性为Symbol.iterator的函数
+
+      // 可以使用generator来简化iterator
+    </script>
+  </body>
+</html>

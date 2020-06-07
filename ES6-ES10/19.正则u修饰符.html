@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>正则u修饰符</title>
+  </head>
+  <body>
+    <script>
+      // 处理中文 4字节数问题:通通加u修饰符
+      // unicode编码
+      let s = '𠮷'
+      console.log(s.length) // 2
+      let s2 = '\uD842\uDFB7'
+      console.log(s) // 𠮷
+      console.log(s2) // 𠮷
+      console.log(/^\uD842/.test(s2)) // true 但是这样匹配的结果不应该是true
+      console.log(/^\uD842/u.test(s2)) // false 这才是正确结果
+      console.log(s === s2) // true
+      // 正则表达式/^.$/匹配所有单字符字符串
+      console.log(/^.$/.test(s)) // ES5 false
+      console.log(/^.$/u.test(s)) // ES6 true
+
+      // 使用Unicode码点来匹配字符，必须使用u修饰符
+      console.log(/\u{20BB7}/u.test(s)) // true
+      console.log(/\u{61}/u.test('a')) // true
+      console.log('--------')
+      console.log(/𠮷{2}/u.test('𠮷𠮷'))
+
+      console.log(/[a-z]/iu.test('\u212A')) // true
+    </script>
+  </body>
+</html>
